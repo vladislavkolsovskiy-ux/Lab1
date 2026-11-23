@@ -12,6 +12,7 @@ public:
     Keeper();
     ~Keeper();
     
+    void add(Base* obj);
     void printAll() const;
-    // Методы добавления/удаления/сохранения добавим в следующие дни
+    int getCount() const { return count; }
 };
