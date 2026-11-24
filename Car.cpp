@@ -42,10 +42,27 @@ void Car::print() const {
 }
 
 void Car::input() {
-    std::cout << "Введите марку: "; std::cin >> brand;
-    std::cout << "Введите модель: "; std::cin >> model;
-    std::cout << "Введите год выпуска: "; std::cin >> year;
-    std::cout << "Сколько городов для доставки? "; std::cin >> cityCount;
+    std::cout << "Введите марку: ";
+    std::getline(std::cin, brand);
+    
+    std::cout << "Введите модель: ";
+    std::getline(std::cin, model);
+    
+    std::cout << "Введите год выпуска: ";
+    while (!(std::cin >> year) || year < 1900 || year > 2100) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите корректный год: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    std::cout << "Сколько городов для доставки? ";
+    while (!(std::cin >> cityCount) || cityCount < 0) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите неотрицательное число: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
     delete[] cities; delete[] hours; delete[] volumes;
     cities = new std::string[cityCount];
@@ -53,10 +70,25 @@ void Car::input() {
     volumes = new double[cityCount];
     
     for (int i = 0; i < cityCount; ++i) {
-        std::cout << "Город " << i + 1 << ":\n  Название: "; std::cin >> cities[i];
-        std::cout << "  Часы доставки: "; std::cin >> hours[i];
-        std::cout << "  Объем груза: "; std::cin >> volumes[i];
-        if (hours[i] < 0 || volumes[i] < 0) throw InvalidInputException("Часы и объем не могут быть отрицательными");
+        std::cout << "Город " << i + 1 << ":\n";
+        std::cout << "  Название: ";
+        std::getline(std::cin, cities[i]);
+        
+        std::cout << "  Часы доставки: ";
+        while (!(std::cin >> hours[i]) || hours[i] < 0) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "  Ошибка! Введите неотрицательное число: ";
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        
+        std::cout << "  Объем груза: ";
+        while (!(std::cin >> volumes[i]) || volumes[i] < 0) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "  Ошибка! Введите неотрицательное число: ";
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 }
 
@@ -72,4 +104,9 @@ void Car::loadFromFile(std::ifstream& in) {
     hours = new int[cityCount];
     volumes = new double[cityCount];
     for (int i = 0; i < cityCount; ++i) in >> cities[i] >> hours[i] >> volumes[i];
+}
+
+std::ostream& operator<<(std::ostream& os, const Car& car) {
+    car.print();
+    return os;
 }

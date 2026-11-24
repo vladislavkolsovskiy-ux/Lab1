@@ -19,3 +19,8 @@ Base::~Base() {
 
 std::string Base::getType() const { return transportType; }
 void Base::setType(const std::string& type) { transportType = type; }
+
+std::ostream& operator<<(std::ostream& os, const Base& obj) {
+    obj.print();
+    return os;
+}

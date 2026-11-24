@@ -33,16 +33,46 @@ void Train::print() const {
 }
 
 void Train::input() {
-    std::cout << "Введите наименование поезда: "; std::cin >> name;
-    std::cout << "Введите год выпуска: "; std::cin >> year;
-    std::cout << "Введите количество вагонов: "; std::cin >> wagons;
-    if (wagons < 0) throw InvalidInputException("Кол-во вагонов не может быть отрицательным");
-    std::cout << "Введите объем груза: "; std::cin >> cargoVolume;
-    std::cout << "Сколько станций в маршруте? "; std::cin >> routeCount;
+    std::cout << "Введите наименование поезда: ";
+    std::getline(std::cin, name);
+    
+    std::cout << "Введите год выпуска: ";
+    while (!(std::cin >> year) || year < 1900 || year > 2100) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите корректный год: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    std::cout << "Введите количество вагонов: ";
+    while (!(std::cin >> wagons) || wagons < 0) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите неотрицательное число: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    std::cout << "Введите объем груза: ";
+    while (!(std::cin >> cargoVolume) || cargoVolume < 0) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите положительное число: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    std::cout << "Сколько станций в маршруте? ";
+    while (!(std::cin >> routeCount) || routeCount < 0) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите неотрицательное число: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
     delete[] route;
     route = new std::string[routeCount];
     for (int i = 0; i < routeCount; ++i) {
-        std::cout << "Станция " << i + 1 << ": "; std::cin >> route[i];
+        std::cout << "Станция " << i + 1 << ": ";
+        std::getline(std::cin, route[i]);
     }
 }
 
@@ -56,4 +86,9 @@ void Train::loadFromFile(std::ifstream& in) {
     delete[] route;
     route = new std::string[routeCount];
     for (int i = 0; i < routeCount; ++i) in >> route[i];
+}
+
+std::ostream& operator<<(std::ostream& os, const Train& train) {
+    train.print();
+    return os;
 }

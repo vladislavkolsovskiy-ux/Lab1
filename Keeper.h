@@ -4,15 +4,18 @@
 
 class Keeper {
 private:
-    Base** items;     // Динамический массив указателей на базовый класс
-    int count;        // Текущее количество объектов
-    int capacity;     // Текущая емкость массива
+    Base** items;
+    int count;
+    int capacity;
 
 public:
     Keeper();
     ~Keeper();
     
     void add(Base* obj);
+    void remove(int index);
     void printAll() const;
+    void saveToFile(const std::string& filename) const;
+    void loadFromFile(const std::string& filename);
     int getCount() const { return count; }
 };

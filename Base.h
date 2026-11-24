@@ -1,4 +1,3 @@
-// Base.h
 #pragma once
 #include <iostream>
 #include <string>
@@ -6,7 +5,7 @@
 
 class Base {
 protected:
-    std::string transportType; // Общий тип (Самолет, Поезд, Автомобиль)
+    std::string transportType;
 
 public:
     Base();
@@ -14,7 +13,6 @@ public:
     Base(const Base& other);
     virtual ~Base();
 
-    // Чисто виртуальные методы (делаем класс абстрактным)
     virtual void print() const = 0;
     virtual void input() = 0;
     virtual void saveToFile(std::ofstream& out) const = 0;
@@ -22,4 +20,7 @@ public:
 
     std::string getType() const;
     void setType(const std::string& type);
+
+    // Переопределение оператора <<
+    friend std::ostream& operator<<(std::ostream& os, const Base& obj);
 };

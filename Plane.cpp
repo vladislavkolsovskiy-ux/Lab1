@@ -33,15 +33,38 @@ void Plane::print() const {
 }
 
 void Plane::input() {
-    std::cout << "Введите наименование самолета: "; std::cin >> name;
-    std::cout << "Введите объем перевозимого груза (тонн): "; std::cin >> cargoVolume;
-    if (cargoVolume < 0) throw InvalidInputException("Объем груза не может быть отрицательным");
-    std::cout << "Введите габариты (ширина высота длина): "; std::cin >> width >> height >> length;
-    std::cout << "Сколько городов посещает? "; std::cin >> cityCount;
+    std::cout << "Введите наименование самолета: ";
+    std::getline(std::cin, name);
+    
+    std::cout << "Введите объем перевозимого груза (тонн): ";
+    while (!(std::cin >> cargoVolume) || cargoVolume < 0) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите положительное число: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    std::cout << "Введите габариты (ширина высота длина): ";
+    while (!(std::cin >> width >> height >> length)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите три числа: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
+    std::cout << "Сколько городов посещает? ";
+    while (!(std::cin >> cityCount) || cityCount < 0) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Ошибка! Введите неотрицательное число: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    
     delete[] cities;
     cities = new std::string[cityCount];
     for (int i = 0; i < cityCount; ++i) {
-        std::cout << "Город " << i + 1 << ": "; std::cin >> cities[i];
+        std::cout << "Город " << i + 1 << ": ";
+        std::getline(std::cin, cities[i]);
     }
 }
 
@@ -61,3 +84,8 @@ std::string Plane::getName() const { return name; }
 void Plane::setName(const std::string& n) { name = n; }
 double Plane::getCargoVolume() const { return cargoVolume; }
 void Plane::setCargoVolume(double c) { cargoVolume = c; }
+
+std::ostream& operator<<(std::ostream& os, const Plane& plane) {
+    plane.print();
+    return os;
+}
